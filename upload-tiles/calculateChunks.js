@@ -17,13 +17,13 @@ const calculateChunks = () => {
   const chunks = {};
 
   const calculateChunkTopLeft = (chunkOrder) => ({
-    x: square.topLeft.x + stepX * chunkOrder,
+    x: square.topLeft.x + stepX * (chunkOrder - 1),
     y: square.topLeft.y,
   });
 
   const calculateChunkbottomRight = (chunkOrder) => ({
-    x: square.bottomRight.x + stepX * chunkOrder,
-    y: square.bottomRight.y + stepY * chunkOrder,
+    x: square.topLeft.x + stepX * chunkOrder,
+    y: square.bottomRight.y,
   });
 
   console.log({ stepX, stepY });

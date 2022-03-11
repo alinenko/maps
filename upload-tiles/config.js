@@ -2,20 +2,20 @@ const GS_API_VERSION = 917;
 
 class RoundRobin {
   constructor(data) {
-      this.data = data;
-      this.idx = 0;
+    this.data = data;
+    this.idx = 0;
   }
   next() {
-      if (this.idx >= this.data.length) {
-          this.idx = 0;
-      }
-      const e = this.data[this.idx];
-      this.idx++
-      return e;
+    if (this.idx >= this.data.length) {
+      this.idx = 0;
+    }
+    const e = this.data[this.idx];
+    this.idx++;
+    return e;
   }
   random() {
-      const i = Math.floor(Math.random() * this.length);
-      return this[i];
+    const i = Math.floor(Math.random() * this.length);
+    return this[i];
   }
 }
 
@@ -26,8 +26,9 @@ const params = {
       name: "HERE",
       //to reduce bombarding - round-robin on cdn servers
       downloadUrlPatter: (() => {
-        const cdn = new RoundRobin([1, 2, 3, 4])
-        return ({ z, y, x }) => `https://${cdn.next()}.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/satellite.day/${z}/${x}/${y}/256/png8?apiKey=t_kKKAHgEZ-SCa-v08N8xCchEK_wxxp7dFAmEOpi9hs`
+        const cdn = new RoundRobin([1, 2, 3, 4]);
+        return ({ z, y, x }) =>
+          `https://${cdn.next()}.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/satellite.day/${z}/${x}/${y}/256/png8?apiKey=t_kKKAHgEZ-SCa-v08N8xCchEK_wxxp7dFAmEOpi9hs`;
       })(),
       fileExt: "png",
     },
@@ -40,16 +41,18 @@ const params = {
     {
       name: "COSM",
       downloadUrlPatter: (() => {
-        const cdn = new RoundRobin(['a', 'b', 'c'])
-        return ({ z, y, x }) => `https://${cdn.next()}.tile-cyclosm.openstreetmap.fr/cyclosm/${z}/${x}/${y}.png`
+        const cdn = new RoundRobin(["a", "b", "c"]);
+        return ({ z, y, x }) =>
+          `https://${cdn.next()}.tile-cyclosm.openstreetmap.fr/cyclosm/${z}/${x}/${y}.png`;
       })(),
       fileExt: "png",
     },
     {
       name: "OSM",
       downloadUrlPatter: (() => {
-        const cdn = new RoundRobin(['a', 'b', 'c'])
-        return ({ z, y, x }) => `https://${cdn.next()}.tile.cyclestreets.net/mapnik/${z}/${x}/${y}.png`
+        const cdn = new RoundRobin(["a", "b", "c"]);
+        return ({ z, y, x }) =>
+          `https://${cdn.next()}.tile.cyclestreets.net/mapnik/${z}/${x}/${y}.png`;
       })(),
       fileExt: "png",
     },
@@ -57,7 +60,10 @@ const params = {
   minZoomLevel: 5,
   startZoomLevel: 18,
   // please put you coords config here:
-  startCoords: undefined,
+  startCoords: {
+    topLeft: { x: 150328, y: 85680 },
+    bottomRight: { x: 150507, y: 89786 },
+  },
   // for instance:
   // startCoords: {
   //   topLeft: { x: 50.465670, y: 30.362977 },
