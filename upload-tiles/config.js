@@ -60,10 +60,7 @@ const params = {
   minZoomLevel: 5,
   startZoomLevel: 18,
   // please put you coords config here:
-  startCoords: {
-    topLeft: { x: 150328, y: 85680 },
-    bottomRight: { x: 150507, y: 89786 },
-  },
+  startCoords: undefined,
   // for instance:
   // startCoords: {
   //   topLeft: { x: 50.465670, y: 30.362977 },
