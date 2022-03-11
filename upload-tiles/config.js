@@ -28,7 +28,7 @@ const params = {
       downloadUrlPatter: (() => {
         const cdn = new RoundRobin([1, 2, 3, 4]);
         return ({ z, y, x }) =>
-          `https://${cdn.next()}.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/satellite.day/${z}/${x}/${y}/256/png8?apiKey=t_kKKAHgEZ-SCa-v08N8xCchEK_wxxp7dFAmEOpi9hs`;
+          `https://${cdn.next()}.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/satellite.day/${z}/${x}/${y}/256/jpg?apiKey=t_kKKAHgEZ-SCa-v08N8xCchEK_wxxp7dFAmEOpi9hs`;
       })(),
       fileExt: "png",
     },

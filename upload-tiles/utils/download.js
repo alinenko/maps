@@ -1,6 +1,7 @@
 const https = require("https");
 const fs = require("fs");
 const { tilesDestDirectory } = require("../constants");
+const { log } = require("./common");
 
 const download = (resource, locationParams, cb = () => {}) => {
   const { fileExt, downloadUrlPatter, name: resourceName } = resource;
@@ -21,7 +22,7 @@ const download = (resource, locationParams, cb = () => {}) => {
   const downloadUrl = downloadUrlPatter(locationParams);
 
   return new Promise((resolve, reject) => {
-    console.log(`Downloading file by URL ${downloadUrl} to dest ${dest}`);
+    log(`Downloading file by URL ${downloadUrl} to dest ${dest}`);
 
     https
       .get(

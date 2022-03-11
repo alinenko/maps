@@ -8,6 +8,7 @@ const {
 const { download } = require("./utils/download");
 const { writeResult, getResult } = require("./utils/handleResultFile");
 const { coordToTile } = require("./utils/geo");
+const { log, error } = require("./utils/common");
 
 Array.prototype.unique = function() {
   return this.filter((value, index, self) => self.indexOf(value) === index)
@@ -73,11 +74,11 @@ const downloadAll = async () => {
 
 
   if (!startCoords) {
-    console.error("!!!ERROR!!!");
-    console.error("!!!ERROR!!!");
-    console.error("Please set topLeft and bottomRight coords to config");
-    console.error("!!!ERROR!!!");
-    console.error("!!!ERROR!!!");
+    error("!!!ERROR!!!");
+    error("!!!ERROR!!!");
+    error("Please set topLeft and bottomRight coords to config");
+    error("!!!ERROR!!!");
+    error("!!!ERROR!!!");
     process.exit();
   }
   //if floating point coords provided convert it to tile coords
@@ -86,7 +87,7 @@ const downloadAll = async () => {
     startCoords.bottomRight = coordToTile(startCoords.bottomRight.x, startCoords.bottomRight.y, startZoomLevel);
   }
 
-  console.log(`downloading all tiles in bbox (${startCoords.topLeft},${startCoords.bottomRight}); zoom: ${startZoomLevel}`)
+  log(`Downloading all tiles in bbox ((${startCoords.topLeft.x},${startCoords.topLeft.y}),(${startCoords.bottomRight.x},${startCoords.bottomRight.y})); zoom: ${startZoomLevel}`)
 
   const configsByZoomLevel = buildConfigsByZoomLevel(
     minZoomLevel,
@@ -100,7 +101,8 @@ const downloadAll = async () => {
 
     const XCoords = fillCoordsArr(topLeftCoords.x, bottomRightCoords.x);
     const YCoords = fillCoordsArr(topLeftCoords.y, bottomRightCoords.y);
-
+    const totaltiles = XCoords.length * YCoords.length;
+    let count = 0;
     for (const x of XCoords) {
       for (const y of YCoords) {
         const locationParams = { z, x, y };
@@ -115,8 +117,10 @@ const downloadAll = async () => {
           for (const e of ex) {
             providers.push(e.resource.name);
           }
+          count++;
+          log(`Done: ${totaltiles}/${count} (${((count/totaltiles)*100).toFixed(2)}%)`)
         } catch (err) {
-          console.log(err);
+          error(err);
         }
 
         result[tileId] = {
