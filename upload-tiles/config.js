@@ -55,7 +55,7 @@ const params = {
     // },
   ],
   minZoomLevel: 5,
-  startZoomLevel: 18,
+  startZoomLevel: 17,
   // please put you coords config here:
   startCoords: undefined,
   // for instance:
