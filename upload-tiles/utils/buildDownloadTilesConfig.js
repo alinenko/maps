@@ -1,4 +1,5 @@
-const times = require("lodash.times");
+const times = require('lodash.times');
+const _ = require('lodash');
 
 const fillCoordsArr = (start, end) => {
   const coordsNum = end - start;
@@ -24,11 +25,11 @@ const buildZoomLevels = (minZoomLevel, startZoomLevel) => {
   return zoomLevelsArr;
 };
 
-const buildConfigsByZoomLevel = (minZoomLevel, startZoomLevel, startCoords) => {
-  const zoomLevels = buildZoomLevels(minZoomLevel, startZoomLevel);
+const buildConfigsByZoomLevel = (minZoomLevel, startZoomLevel, startCoords, coordsLevel) => {
+  let zoomLevels = buildZoomLevels(minZoomLevel, coordsLevel);
 
-  return zoomLevels.map((zL) => {
-    const zoomDiff = startZoomLevel - zL;
+  zoomLevels = zoomLevels.map((zL) => {
+    const zoomDiff = coordsLevel - zL;
     const coordsDivider = Math.pow(2, zoomDiff);
     const startCoordsForZoomLevel =
       zoomDiff === 0
@@ -48,6 +49,10 @@ const buildConfigsByZoomLevel = (minZoomLevel, startZoomLevel, startCoords) => {
       zoomLevel: zL,
       coords: startCoordsForZoomLevel,
     };
+  });
+
+  return _.filter(zoomLevels, (zL) => {
+    return zL.zoomLevel <= startZoomLevel;
   });
 };
 

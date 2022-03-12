@@ -70,7 +70,7 @@ if (argv['minzoom']) {
 }
 
 const downloadAll = async () => {
-  const { minZoomLevel, startZoomLevel, startCoords, resources } = params;
+  const { coordsLevel, minZoomLevel, startZoomLevel, startCoords, resources } = params;
 
 
   if (!startCoords) {
@@ -92,8 +92,13 @@ const downloadAll = async () => {
   const configsByZoomLevel = buildConfigsByZoomLevel(
     minZoomLevel,
     startZoomLevel,
-    startCoords
+    startCoords,
+    coordsLevel
   );
+
+  if (!coordsLevel) {
+    coordsLevel = startZoomLevel;
+  }
 
   for await (const { zoomLevel: z, coords } of configsByZoomLevel) {
     const topLeftCoords = coords.topLeft;
