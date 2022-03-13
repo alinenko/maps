@@ -1,7 +1,7 @@
-const fs = require("fs");
-const { resultJsonFilePath, resultJsonFileName, tilesDestDirectory } = require("../constants");
+const fs = require('fs');
+const { resultJsonFilePath } = require('../constants');
 
-const getResult = (resources) => {
+const getResult = () => {
   let result = {};
 
   if (fs.existsSync(resultJsonFilePath)) {
@@ -13,7 +13,16 @@ const getResult = (resources) => {
 };
 
 const writeResult = (result) => {
-  fs.writeFileSync(resultJsonFilePath, JSON.stringify(result), "utf8");
+  const resultJson = JSON.stringify(result);
+  const resultJsonLength = resultJson.length;
+  const chunkLength = 10000;
+
+  fs.writeFileSync(resultJsonFilePath, '', 'utf8');
+
+  for(let i = 0; (i - 1) * chunkLength - resultJsonLength < 0; i++ ) {
+    const chunck = resultJson.substr(i * chunkLength, chunkLength);
+    fs.appendFileSync(resultJsonFilePath, chunck, { encoding: 'utf8' });
+  }
 };
 
 module.exports = {

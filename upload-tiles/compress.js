@@ -44,7 +44,7 @@ const rm = (dest) => {
   (fs.rm && fs.rm(dest, { force: true }, (e)=>{})) || (fs.unlink && fs.unlink(dest, ()=>{}))
 }
 
-const compressPng = async (path, quality = '40', type = '.png') => {
+const compressFile = async (path, quality = '40', type = '.png') => {
   const filePathSplit = path.split(type);
   const filePathWithoutType = filePathSplit[0];
 
@@ -64,21 +64,55 @@ const compressPng = async (path, quality = '40', type = '.png') => {
   return true;
 }
 
-const compress = async (files, quality, type) => {
+const compressFiles = async (files, quality, type) => {
   const chunks = _.chunk(files, 10);
 
   for(let chunk of chunks) {
     await Promise.all(_.map(chunk, (file) => {
-      return compressPng(file, quality, type);
+      return compressFile(file, quality, type);
     }));
   }
 }
 
+const getFolders = (path) => {
+  return new Promise((resolve) => {
+    fs.readdir(path, (err, list) => {
+      if (err) {
+        console.log(err);
+        return resolve([]);
+      }
+
+      list = list.filter((folder) => {
+        return !folder.includes('.');
+      });
+
+      return resolve(list);
+    });
+  });
+}
+
 const main = async () => {
-  let files = await getDirectories(`./${tilesDestDirectory}/HERE`);
-  await compress(files, 60, '.png');
-  files = await getDirectories(`./${tilesDestDirectory}/GS`);
-  await compress(files, 60, '.jpeg');
+  const herePath = `./${tilesDestDirectory}/HERE`;
+  const hereZoomFolders = await getFolders(`${herePath}`);
+
+  for(const zoomFolder of hereZoomFolders) {
+    const folders = await getFolders(`${herePath}/${zoomFolder}`);
+    for(const yFolder of folders) {
+      const files = await getDirectories(`${herePath}/${zoomFolder}/${yFolder}`);
+      await compressFiles(files, 60, '.png');
+    }
+  }
+
+  const gsPath = `./${tilesDestDirectory}/GS`;
+  const gsZoomFolders = await getFolders(`${gsPath}`);
+
+  for(const zoomFolder of gsZoomFolders) {
+    const folders = await getFolders(`${gsPath}/${zoomFolder}`);
+    for(const yFolder of folders) {
+      const files = await getDirectories(`${gsPath}/${zoomFolder}/${yFolder}`);
+      await compressFiles(files, 60, '.png');
+    }
+  }
 };
 
 main();

@@ -6,6 +6,7 @@
   "scripts": {
     "compress": "node compress.js",
     "start": "node index.js",
+    "scan": "node check.js",
     "calculateChunks": "node calculateChunks.js"
   },
   "author": "",
